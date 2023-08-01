@@ -1,3 +1,5 @@
+use core::fmt::Display;
+
 use rand::distributions::{Distribution, Standard};
 use rand::Rng;
 
@@ -25,6 +27,30 @@ struct Step {
 pub struct Puzzle {
     seed: Number,
     steps: [Step; 10],
+}
+
+impl Display for Puzzle {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}{}", self.seed, self.steps)
+    }
+}
+
+impl Display for Step {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, " {} {}", self.operator, self.operand)
+    }
+}
+
+impl Display for Op {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let operator = match self {
+            Op::Add => "+",
+            Op::Sub => "-",
+            Op::Mul => "*",
+            Op::Div => "/",
+        };
+        write!(f, "{}", operator)
+    }
 }
 
 /// Create a new puzzle with random seed and steps
@@ -83,6 +109,14 @@ impl Distribution<Step> for Standard {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn it_prints_puzzles() {
+        let puzzle = Puzzle::default();
+        let puzzle_output = String::from("10 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1");
+
+        assert_eq!(format!("{}", puzzle), puzzle_output);
+    }
 
     #[test]
     fn it_generates_puzzles() {
