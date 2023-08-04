@@ -31,7 +31,11 @@ pub struct Puzzle {
 
 impl Display for Puzzle {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}{}", self.seed, self.steps)
+        let mut steps_formatted = String::from("");
+        for step in self.steps {
+            steps_formatted += &format!(" {} {}", step.operator, step.operand);
+        }
+        write!(f, "{}{}", self.seed, steps_formatted)
     }
 }
 
