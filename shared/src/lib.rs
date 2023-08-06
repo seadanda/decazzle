@@ -1,7 +1,7 @@
 use core::fmt::Display;
 
 use rand::distributions::{Distribution, Standard};
-use rand::Rng;
+use rand::{thread_rng, Rng};
 
 /// Enum for the possible operations for a step
 #[derive(Debug, PartialEq, Clone, Copy)]
@@ -13,7 +13,7 @@ pub enum Op {
 }
 
 // type alias to make struct definitions more readable
-type Number = i32;
+type Number = u32;
 
 /// One step in the puzzle containing an operator and the second operand
 #[derive(Debug, PartialEq, Clone, Copy)]
@@ -60,7 +60,7 @@ impl Display for Op {
 /// Create a new puzzle with random seed and steps
 impl Puzzle {
     pub fn new() -> Self {
-        let seed = rand::random();
+        let seed = thread_rng().gen_range(0..100);
         let steps: [Step; 10] = rand::random();
 
         Self { seed, steps }
@@ -104,7 +104,14 @@ impl Distribution<Op> for Standard {
 impl Distribution<Step> for Standard {
     fn sample<R: Rng + ?Sized>(&self, _rng: &mut R) -> Step {
         let operator = rand::random();
-        let operand = rand::random();
+        let range = match operator {
+            Op::Add => 0..100,
+            Op::Sub => 0..100,
+            Op::Mul => 0..10,
+            Op::Div => 0..10,
+        };
+
+        let operand = thread_rng().gen_range(range);
 
         Step { operator, operand }
     }
