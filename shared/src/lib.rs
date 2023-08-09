@@ -3,7 +3,7 @@ use core::fmt::Display;
 use rand::distributions::{Distribution, Standard};
 use rand::{thread_rng, Rng};
 
-const STEPS_PER_PUZZLE: usize = 2;
+const STEPS_PER_PUZZLE: usize = 10;
 
 /// Enum for the possible operations for a step
 #[derive(Debug, PartialEq, Clone, Copy)]
@@ -107,8 +107,8 @@ impl Distribution<Step> for Standard {
     fn sample<R: Rng + ?Sized>(&self, _rng: &mut R) -> Step {
         let operator = rand::random();
         let range = match operator {
-            Op::Add => 1..100,
-            Op::Sub => 1..100,
+            Op::Add => 1..10,
+            Op::Sub => 1..10,
             Op::Mul => 1..10,
             Op::Div => 1..10,
         };
